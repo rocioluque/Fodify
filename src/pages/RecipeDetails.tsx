@@ -1,7 +1,27 @@
 import { useParams } from "react-router-dom";
-
 import { Cover } from "../components/ui/Cover";
 import { useRecipeDetails } from "../hooks/useRecipeDetails";
+
+function Badge({ children }: { children: string }) {
+  return (
+    <span className="rounded-full bg-white/90 px-3 py-1 text-sm font-medium shadow">
+      {children}
+    </span>
+  );
+}
+
+function InfoItem({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-2xl bg-gray-50 p-4 text-center shadow-sm">
+      <p className="text-xs uppercase tracking-wide text-gray-500">
+        {label}
+      </p>
+      <p className="mt-1 text-lg font-semibold text-gray-900">
+        {value}
+      </p>
+    </div>
+  );
+}
 
 export function RecipeDetails() {
   const { id } = useParams<{ id: string }>();
@@ -10,7 +30,7 @@ export function RecipeDetails() {
   if (isPending) {
     return (
       <section className="h-[70vh] flex justify-center items-center">
-        <Cover title="Cargando..." />
+        <Cover title="Cargando receta..." />
       </section>
     );
   }
@@ -18,45 +38,73 @@ export function RecipeDetails() {
   if (!data) return null;
 
   return (
-    <section className="flex flex-col max-w-7xl m-auto p-10">
+    <section className="max-w-6xl mx-auto px-6 py-12">
+      {/* Título */}
       <Cover title={data.name} />
 
-      <section className="flex gap-7 mt-14">
-        <img src={data.image} alt={data.name} className="w-96 rounded-xl" />
+      {/* Card principal */}
+      <div className="mt-12 bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div className="grid lg:grid-cols-2 gap-10 p-8 lg:p-12">
+          
+          {/* Imagen */}
+          <div className="relative">
+            <img
+              src={data.image}
+              alt={data.name}
+              className="w-full h-full max-h-[420px] object-cover rounded-2xl shadow-md"
+            />
 
-        <div className="flex flex-col gap-4">
-          <p>
-            <strong>Cocina:</strong> {data.cuisine}
-          </p>
-          <p>
-            <strong>Dificultad:</strong> {data.difficulty}
-          </p>
-          <p>
-            <strong>Porciones:</strong> {data.servings}
-          </p>
-          <p>
-            <strong>Calorías:</strong> {data.caloriesPerServing}
-          </p>
-
-          <div>
-            <h3 className="font-semibold mt-4">Ingredientes</h3>
-            <ul className="list-disc ml-5">
-              {data.ingredients.map((ing, i) => (
-                <li key={i}>{ing}</li>
-              ))}
-            </ul>
+            {/* Badges */}
+            <div className="absolute top-4 left-4 flex gap-2">
+              <Badge>{data.cuisine}</Badge>
+              <Badge>{data.difficulty}</Badge>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mt-4">Instrucciones</h3>
-            <ol className="list-decimal ml-5">
-              {data.instructions.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
+          {/* Información */}
+          <div className="flex flex-col gap-8">
+            
+            {/* Datos rápidos */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <InfoItem label="Porciones" value={data.servings} />
+              <InfoItem label="Calorías" value={`${data.caloriesPerServing} kcal`} />
+              <InfoItem label="Prep." value={`${data.prepTimeMinutes} min`} />
+              <InfoItem label="Cocción" value={`${data.cookTimeMinutes} min`} />
+            </div>
+
+            {/* Ingredientes */}
+            <section>
+              <h3 className="text-xl font-semibold mb-3">Ingredientes</h3>
+              <ul className="space-y-2 text-gray-700">
+                {data.ingredients.map((ing, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-2"
+                  >
+                    <span className="mt-2 h-2 w-2 rounded-full bg-[#FF9F68]" />
+                    <span>{ing}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Instrucciones */}
+            <section>
+              <h3 className="text-xl font-semibold mb-3">Preparación</h3>
+              <ol className="space-y-3 text-gray-700">
+                {data.instructions.map((step, i) => (
+                  <li key={i} className="flex gap-4">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FF9F68] text-white text-sm font-semibold">
+                      {i + 1}
+                    </span>
+                    <p>{step}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
           </div>
         </div>
-      </section>
+      </div>
     </section>
   );
-}
+};

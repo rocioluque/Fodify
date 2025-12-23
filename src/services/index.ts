@@ -18,8 +18,9 @@ async function getAllRecipes(): Promise<RecipesResponse> {
   return await api.get("/recipes");
 }
 
-async function getRecipeDetails(id: number | undefined) {
-  return await api.get<Recipe>(`/recipes/${id}`);
+async function getRecipeById(id: number): Promise<Recipe> {
+  const res = await api.get<Recipe>(`/recipes/${id}`);
+  return res.data;
 }
 
 async function deleteRecipes(id: number | undefined) {
@@ -45,11 +46,7 @@ async function updateRecipe(id: number, body: RecipePayload) {
     image: body.image,
     mealType: body.mealType,
   });
-}
-
-export async function getRecipeById(id: number) {
-  return await api.get<Recipe>(`/recipes/${id}`);
-}
+};
 
 // =======================
 // Users
@@ -61,7 +58,7 @@ async function getAllUsers() {
 
 export {
   getAllRecipes,
-  getRecipeDetails,
+  getRecipeById,
   deleteRecipes,
   createRecipe,
   updateRecipe,
