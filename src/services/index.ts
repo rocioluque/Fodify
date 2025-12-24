@@ -19,8 +19,7 @@ async function getAllRecipes(): Promise<RecipesResponse> {
 }
 
 async function getRecipeById(id: number): Promise<Recipe> {
-  const res = await api.get<Recipe>(`/recipes/${id}`);
-  return res.data;
+  return api.get(`/recipes/${id}`);
 }
 
 async function deleteRecipes(id: number | undefined) {

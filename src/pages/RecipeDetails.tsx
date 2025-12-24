@@ -25,7 +25,7 @@ function InfoItem({ label, value }: { label: string; value: string | number }) {
 
 export function RecipeDetails() {
   const { id } = useParams<{ id: string }>();
-  const { data, isPending } = useRecipeDetails(Number(id));
+  const { data, isPending, isError } = useRecipeDetails(Number(id));
 
   if (isPending) {
     return (
@@ -35,7 +35,13 @@ export function RecipeDetails() {
     );
   }
 
-  if (!data) return null;
+  if (isError) {
+    return (
+      <section className="h-[70vh] flex justify-center items-center">
+        <Cover title="No se pudo cargar la receta" />
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-12">
@@ -86,10 +92,12 @@ export function RecipeDetails() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </section>            
+          </div>
+        </div>
 
-            {/* Instrucciones */}
-            <section>
+        {/* Instrucciones */}
+            <section className="px-8 lg:px-12 pb-10">
               <h3 className="text-xl font-semibold mb-3">Preparación</h3>
               <ol className="space-y-3 text-gray-700">
                 {data.instructions.map((step, i) => (
@@ -102,8 +110,6 @@ export function RecipeDetails() {
                 ))}
               </ol>
             </section>
-          </div>
-        </div>
       </div>
     </section>
   );
