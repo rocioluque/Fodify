@@ -2,8 +2,12 @@ import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
 import { useUpdateRecipe } from '../../hooks/useUpdateRecipe';
+
+const baseInput =
+  "border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500";
+const baseBtn =
+  "px-3 py-2 rounded-lg border hover:bg-gray-100 transition text-sm";
 
 /* ======================================================
    SCHEMA
@@ -76,8 +80,21 @@ export function EditRecipeForm({
     resolver: zodResolver(recipeSchema),
       defaultValues: {
       ...initialData,
-      tags: initialData.tags ?? [],
-      mealType: initialData.mealType ?? [],
+      ingredients: initialData.ingredients?.map((i: any) =>
+        typeof i === 'string' ? { value: i } : i
+      ) ?? [],
+
+      instructions: initialData.instructions?.map((i: any) =>
+        typeof i === 'string' ? { value: i } : i
+      ) ?? [],
+
+      tags: initialData.tags?.map((t: any) =>
+        typeof t === 'string' ? { value: t } : t
+      ) ?? [],
+
+      mealType: initialData.mealType?.map((m: any) =>
+        typeof m === 'string' ? { value: m } : m
+      ) ?? [],
     },
   });
 
@@ -102,15 +119,6 @@ const mealType = useFieldArray({
   name: 'mealType',
 });
 
-  /* ===================== EFFECT ===================== */
-  useEffect(() => {
-    reset({
-      ...initialData,
-      tags: initialData.tags ?? [],
-      mealType: initialData.mealType ?? [],
-    });
-  }, [initialData, reset]);
-
   /* ===================== SUBMIT ===================== */
   function onSubmit(data: RecipeFormData) {
   const payload = {
@@ -122,8 +130,7 @@ const mealType = useFieldArray({
   };
 
   mutate({ id, body: payload });
-}
-
+};
 
   /* ===================== UI ===================== */
   return (
@@ -133,26 +140,61 @@ const mealType = useFieldArray({
       {errors.name && <p>{errors.name.message}</p>}
 
       {/* INGREDIENTES */}
-      <section>
-        <h3>Ingredientes</h3>
-        {ingredients.fields.map((field, i) => (
-          <div key={field.id}>
-            <input {...register(`ingredients.${i}.value`)} />
-            <button onClick={() => ingredients.remove(i)}>✕</button>
-          </div>
-        ))}
-        <button onClick={() => ingredients.append({ value: '' })}>
-          + Ingrediente
-        </button>
-      </section>
+      <section className="space-y-3">
+      <h3 className="font-semibold text-lg">Ingredientes</h3>
+
+      {ingredients.fields.map((field, i) => (
+        <div key={field.id} className="flex gap-2 items-center">
+          <input
+            className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-blue-500"
+            {...register(`ingredients.${i}.value`)}
+            placeholder={`Ingrediente ${i + 1}`}
+          />
+
+          <button
+            type="button"
+            className="text-red-500 font-bold text-lg"
+            onClick={() => ingredients.remove(i)}
+          >
+            ✕
+          </button>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        className="text-blue-600 hover:underline"
+        onClick={() => ingredients.append({ value: '' })}
+      >
+        + Agregar ingrediente
+      </button>
+    </section>
+
 
       {/* INSTRUCCIONES */}
       <section>
         <h3>Instrucciones</h3>
+
         {instructions.fields.map((field, i) => (
-          <textarea {...register(`instructions.${i}.value`)} />
+          <div key={field.id}>
+            <textarea
+              {...register(`instructions.${i}.value`)}
+              placeholder={`Paso ${i + 1}`}
+            />
+
+            <button
+              type="button"
+              onClick={() => instructions.remove(i)}
+            >
+              ✕
+            </button>
+          </div>
         ))}
-        <button type="button" onClick={() => instructions.append({ value: '' })}>
+
+        <button
+          type="button"
+          onClick={() => instructions.append({ value: "" })}
+        >
           + Paso
         </button>
       </section>
@@ -160,13 +202,24 @@ const mealType = useFieldArray({
       {/* TAGS */}
       <section>
         <h3>Tags</h3>
+
         {tags.fields.map((field, i) => (
           <div key={field.id} className="flex gap-2">
-            <input {...register(`tags.${i}`)} />
-            <button type="button" onClick={() => tags.remove(i)}>✕</button>
+            <input {...register(`tags.${i}.value`)} />
+
+            <button
+              type="button"
+              onClick={() => tags.remove(i)}
+            >
+              ✕
+            </button>
           </div>
         ))}
-        <button type="button" onClick={() => tags.append({ value: '' })}>
+
+        <button
+          type="button"
+          onClick={() => tags.append({ value: '' })}
+        >
           + Tag
         </button>
       </section>
@@ -174,16 +227,28 @@ const mealType = useFieldArray({
       {/* MEAL TYPE */}
       <section>
         <h3>Meal Type</h3>
+
         {mealType.fields.map((field, i) => (
           <div key={field.id} className="flex gap-2">
-            <input {...register(`mealType.${i}`)} />
-            <button type="button" onClick={() => mealType.remove(i)}>✕</button>
+            <input {...register(`mealType.${i}.value`)} />
+
+            <button
+              type="button"
+              onClick={() => mealType.remove(i)}
+            >
+              ✕
+            </button>
           </div>
         ))}
-        <button type="button" onClick={() => mealType.append({ value: '' })}>
+
+        <button
+          type="button"
+          onClick={() => mealType.append({ value: '' })}
+        >
           + Meal Type
         </button>
       </section>
+
 
       {/* TIEMPOS */}
       <div className="grid grid-cols-2 gap-4">

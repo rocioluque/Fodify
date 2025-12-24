@@ -6,7 +6,6 @@ import type { User } from "../hooks/useAllUsers";
 export function Users() {
   const { data, isPending } = useAllUsers();
 
-  // Estado de paginación
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 6;
 
@@ -18,7 +17,6 @@ export function Users() {
     );
   }
 
-  // Paginación
   const totalUsers = data?.users.length || 0;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
@@ -26,37 +24,39 @@ export function Users() {
   const currentUsers = data?.users.slice(startIndex, endIndex);
 
   return (
-    <section className="flex flex-col justify-center items-center p-10 bg-gray-50 min-h-screen">
-      
+    <section className="flex flex-col items-center p-10 min-h-screen">
       <Cover title="Listado de Usuarios" />
-      <div className="flex flex-wrap gap-6 mt-10 w-full max-w-6xl justify-center">
+
+      {/* GRID DE USUARIOS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 w-full max-w-7xl">
         {currentUsers?.map((user: User) => (
           <div
             key={user.id}
-            className="w-80 border rounded-2xl p-5 bg-white shadow-md flex flex-col gap-3 hover:shadow-lg transition-shadow"
+            className="p-6 rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg border border-gray-200 transition-all hover:shadow-2xl hover:-translate-y-1"
           >
-            {/* Imagen + Nombre */}
-            <div className="flex items-center gap-3">
+            {/* HEADER */}
+            <div className="flex items-center gap-4">
               <img
                 src={user.image}
                 alt={user.firstName}
-                className="w-16 h-16 rounded-full object-cover border-2 border-gray-300"
+                className="w-16 h-16 rounded-full object-cover border-2 border-blue-400 shadow-sm"
               />
+
               <div>
-                <h2 className="text-xl font-semibold text-gray-800">
+                <h2 className="text-xl font-bold text-gray-800">
                   {user.firstName} {user.lastName}
                 </h2>
-                <p className="text-sm text-gray-500">@{user.username}</p>
+                <p className="text-gray-500 text-sm">@{user.username}</p>
               </div>
             </div>
 
-            {/* Rol */}
-            <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+            {/* ROLE */}
+            <span className="mt-3 inline-block px-3 py-1 text-xs font-semibold rounded-full bg-blue-200/60 text-blue-900 w-fit">
               {user.role.toUpperCase()}
             </span>
 
-            {/* Contacto */}
-            <div className="mt-2 text-sm text-gray-700">
+            {/* CONTACTO */}
+            <div className="mt-3 text-sm text-gray-700">
               <p>
                 <strong>Email:</strong> {user.email}
               </p>
@@ -65,39 +65,43 @@ export function Users() {
               </p>
             </div>
 
-            {/* Dirección */}
-            <div className="mt-2 text-sm text-gray-700">
-              <p className="font-semibold">Dirección</p>
+            {/* DIRECCIÓN */}
+            <div className="mt-3 text-sm text-gray-700">
+              <p className="font-semibold text-gray-900">Dirección</p>
               <p>{user.address.address}</p>
               <p>
-                {user.address.city}, {user.address.stateCode} {user.address.postalCode}
+                {user.address.city}, {user.address.stateCode}{" "}
+                {user.address.postalCode}
               </p>
             </div>
 
-            {/* Coordenadas */}
-            <div className="mt-2 text-xs text-gray-400">
-              Lat: {user.address.coordinates.lat} — Long: {user.address.coordinates.lng}
+            {/* COORDS */}
+            <div className="mt-3 text-xs text-gray-500">
+              Lat: {user.address.coordinates.lat} — Long:{" "}
+              {user.address.coordinates.lng}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Controles de paginación */}
-      <div className="flex gap-2 mt-6">
+      {/* PAGINATION */}
+      <div className="flex items-center gap-3 mt-8">
         <button
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 rounded-xl border bg-white shadow-sm hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
         >
           Anterior
         </button>
-        <span className="px-4 py-2">
+
+        <span className="px-4 py-2 font-semibold">
           {currentPage} / {totalPages}
         </span>
+
         <button
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 rounded-xl border bg-white shadow-sm hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
         >
           Siguiente
         </button>
