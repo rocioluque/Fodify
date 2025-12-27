@@ -308,24 +308,33 @@ export function Form() {
             </select>
           </div>
 
-          <input
-            {...register("cuisine")}
-            placeholder="Tipo de cocina"
-            className="border rounded-lg px-3 py-2 w-full"
-          />
+          <div>
+            <label className="text-sm">Tipo de cocina</label>
+            <input
+              {...register("cuisine")}
+              placeholder="Tipo de cocina"
+              className="border rounded-lg px-3 py-2 w-full"
+            />
+          </div>
 
-          <input
-            type="number"
-            {...register("caloriesPerServing", { valueAsNumber: true })}
-            placeholder="Calorías por porción"
-            className="border rounded-lg px-3 py-2 w-full"
-          />
+          <div>
+            <label className="text-sm">Calorías por porción</label>
+            <input
+              type="number"
+              {...register("caloriesPerServing", { valueAsNumber: true })}
+              placeholder="Calorías por porción"
+              className="border rounded-lg px-3 py-2 w-full"
+            />
+          </div>
 
-          <input
-            {...register("image")}
-            placeholder="URL de imagen"
-            className="border rounded-lg px-3 py-2 w-full"
-          />
+          <div>
+            <label className="text-sm">Imagen</label>
+            <input
+              {...register("image")}
+              placeholder="URL de imagen"
+              className="border rounded-lg px-3 py-2 w-full"
+            />
+          </div>
 
           <button
             disabled={isPending}
