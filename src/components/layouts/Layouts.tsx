@@ -33,19 +33,20 @@ export function Layouts() {
   ];
 
   return (
-    <>
-      <Toaster position="top-right" richColors />
+  <>
+    <Toaster position="top-right" richColors />
 
-      {/* Fondo global animado */}
-      <div className="fixed inset-0 -z-10">
-        <Aurora
-          colorStops={["#FF5F1F", "#FF9F68", "#FF2E2E"]}
-          blend={0.5}
-          amplitude={1.0}
-          speed={0.5}
-        />
-      </div>
+    {/* Fondo */}
+    <div className="fixed inset-0 -z-10">
+      <Aurora
+        colorStops={["#FF5F1F", "#FF9F68", "#FF2E2E"]}
+        blend={0.5}
+        amplitude={1.0}
+        speed={0.5}
+      />
+    </div>
 
+    <div className="flex flex-col min-h-screen">
       {/* Header */}
       <PillNav
         logo={logo}
@@ -62,15 +63,14 @@ export function Layouts() {
       />
 
       {/* Contenido */}
-      <main className="pt-20 min-h-screen">
+      <main className="pt-20 flex-1">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="mt-10 border-t border-white/10 bg-gradient-to-r from-[#FF7A18]/30 via-[#FF9F68]/30 to-[#FF2E2E]/30 backdrop-blur-md">
+      <footer className="border-t border-white/10 bg-gradient-to-r from-[#FF7A18]/30 via-[#FF9F68]/30 to-[#FF2E2E]/30 backdrop-blur-md">
         <div className="h-[2px] bg-gradient-to-r from-transparent via-[#FF2E2E] to-transparent" />
         <div className="max-w-6xl mx-auto px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-black/80">
-          
           <span className="text-sm">
             © {new Date().getFullYear()}{" "}
             <strong className="text-black">Foodify</strong>
@@ -95,6 +95,7 @@ export function Layouts() {
           </div>
         </div>
       </footer>
-    </>
-  );
+    </div>
+  </>
+);
 }
