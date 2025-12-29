@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Cover } from "../components/ui/Cover";
 import { useRecipeDetails } from "../hooks/useRecipeDetails";
+import { useAllUsers } from "../hooks/useAllUsers";
 
 function Badge({ children }: { children: string }) {
   return (
@@ -26,6 +27,8 @@ function InfoItem({ label, value }: { label: string; value: string | number }) {
 export function RecipeDetails() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending, isError } = useRecipeDetails(Number(id));
+  const { data: usersData } = useAllUsers();
+  const users = usersData?.users;
 
   if (isPending) {
     return (
@@ -35,7 +38,7 @@ export function RecipeDetails() {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
       <section className="h-[70vh] flex justify-center items-center">
         <Cover title="No se pudo cargar la receta" />
@@ -43,10 +46,14 @@ export function RecipeDetails() {
     );
   }
 
+  const author = users?.find(
+    (user) => user.id === data.userId
+  );
+
   return (
     <section className="max-w-6xl mx-auto px-6 py-12">
       {/* Título */}
-      <Cover title={data.name} />
+      <Cover title={data.name} />      
 
       {/* Card principal */}
       <div className="mt-12 bg-white rounded-3xl shadow-xl overflow-hidden">
@@ -77,6 +84,28 @@ export function RecipeDetails() {
               <InfoItem label="Prep." value={`${data.prepTimeMinutes} min`} />
               <InfoItem label="Cocción" value={`${data.cookTimeMinutes} min`} />
             </div>
+
+            {author && (
+              <div className="mt-3 flex justify-center items-center gap-3 text-sm text-gray-600">
+                <img
+                  src={author.image}
+                  alt={author.firstName}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+                <span>
+                  Creada por{" "}
+                  <span className="font-medium text-gray-800">
+                    {author.firstName} {author.lastName}
+                  </span>
+                </span>
+              </div>
+            )}
+
+            {!author && (
+              <p className="mt-2 text-center text-sm text-gray-500">
+                Creada por usuario #{data.userId}
+              </p>
+            )}
 
             {/* Ingredientes */}
             <section>

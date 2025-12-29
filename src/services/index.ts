@@ -2,6 +2,7 @@ import { api } from "../lib/api";
 import type { Recipe } from "../types/Recipe";
 import type { RecipePayload } from "../types/RecipePayload";
 import type { RecipeCreatePayload } from "../types/RecipeCreatePayload";
+import type { UsersResponse } from "../types/Users";
 
 // =======================
 // Recipes
@@ -15,7 +16,7 @@ export interface RecipesResponse {
 }
 
 async function getAllRecipes(): Promise<RecipesResponse> {
-  return await api.get("/recipes");
+  return await api.get("/recipes?limit=0");
 }
 
 async function getRecipeById(id: number): Promise<Recipe> {
@@ -51,8 +52,10 @@ async function updateRecipe(id: number, body: RecipePayload) {
 // Users
 // =======================
 
-async function getAllUsers() {
-  return await api.get("/users");
+async function getAllUsers(): Promise<UsersResponse> {
+  const res = await fetch("https://dummyjson.com/users?limit=210");
+  if (!res.ok) throw new Error("Error fetching users");
+  return res.json();
 }
 
 export {
