@@ -381,7 +381,7 @@ export function EditRecipeForm({
             className="w-full text-white py-3 rounded-lg transition shadow"
             style={{ backgroundColor: "#FF9F68" }}
           >
-            {isPending ? "Guardando..." : "Crear Receta"}
+            {isPending ? "Guardando..." : "Editar Receta"}
           </button>
         </form>
         </div>

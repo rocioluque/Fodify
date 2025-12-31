@@ -28,13 +28,6 @@ export const router = createBrowserRouter([
       {
         path: "/recipes",
         element: <Recipes />,
-        //(
-          // Si el usuario está autenticado → muestra <Home />
-          // Si NO → redirige (normalmente a / o /login)
-          //<ProtectedRoute>
-            //<Recipes />
-          //</ProtectedRoute>
-        //),
       },
       {
         path: "recipes/:id",
@@ -42,11 +35,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "/new-recipe",
-        element: <Form />,
+        //element: <Form />,
+        element: 
+        (
+          <ProtectedRoute>
+            <Form />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/users",
-        element: <Users />,
+        // element: <Users />,
+        element: 
+        (
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",

@@ -9,17 +9,10 @@ export function getUserFromToken() {
     return null;
   }
 }
-
 export function isAuth() {
   return Boolean(getUserFromToken());
 }
 
 export function isAdmin() {
-  const user = getUserFromToken();
-  return user?.role === "admin";
-}
-
-export function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/";
+  return getUserFromToken()?.role === "admin";
 }

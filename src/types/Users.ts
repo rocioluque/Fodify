@@ -1,7 +1,7 @@
-export interface Address {
-  address: string;
-  city: string;
-}
+// export interface Address {
+//   address: string;
+//   city: string;
+// }
 
 export interface User {
   id: number;

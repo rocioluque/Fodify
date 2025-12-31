@@ -48,10 +48,6 @@ async function updateRecipe(id: number, body: RecipePayload) {
   });
 };
 
-// =======================
-// Users
-// =======================
-
 async function getAllUsers(): Promise<UsersResponse> {
   const res = await fetch("https://dummyjson.com/users?limit=210");
   if (!res.ok) throw new Error("Error fetching users");
